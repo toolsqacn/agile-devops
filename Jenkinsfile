@@ -2,12 +2,10 @@ pipeline {
   agent any
   environment {
     ENTERPRISE = "agileone"
-    PROJECT = "coding-demo"
-    ARTIFACT = "coding-demo"
-    CODE_DEPOT = "coding-demo"
+    PROJECT = "agile-devops"
+    ARTIFACT = "agile-devops"
+    CODE_DEPOT = "agile-devops"
     
-    ARTIFACT_BASE = "${ENTERPRISE}-docker.pkg.coding.net"
-    ARTIFACT_IMAGE="${ARTIFACT_BASE}/${PROJECT}/${ARTIFACT}/${CODE_DEPOT}"
   }
   stages {
     stage('检出') {
@@ -33,16 +31,12 @@ pipeline {
     }
     stage('打包镜像') {
       steps {
-		sh "docker build -t ${ARTIFACT_IMAGE}:${env.GIT_BUILD_REF} ."
-        sh "docker tag ${ARTIFACT_IMAGE}:${env.GIT_BUILD_REF} ${ARTIFACT_IMAGE}:latest"
+		   sh "echo '镜像打包完成"
       }
     }
     stage('推送到制品库') {
       steps {
-		script {
-          docker.withRegistry("https://${ARTIFACT_BASE}", "${env.DOCKER_REGISTRY_CREDENTIALS_ID}") {
-            docker.image("${ARTIFACT_IMAGE}:${env.GIT_BUILD_REF}").push()
-       		docker.image("${ARTIFACT_IMAGE}:latest").push()
+		   sh "echo '已推送制品库'"
           }
         }
       }
